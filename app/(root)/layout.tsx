@@ -1,14 +1,21 @@
-export default function AuthLayout({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
-    return <div className="root-layout">
-        <div className="root-container">
-            <div className="wrapper">
-                {children}
-            </div>
-        </div>
-    </div>;
-  }
-  
+"use client";
+
+import * as React from "react";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
+export default function AuthLayour({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+  );
+}
