@@ -35,6 +35,6 @@ const TransactionSchema = new Schema<ITransaction>(
   { timestamps: true }
 );
 
-const Transaction = model("Transaction", TransactionSchema);
+const Transaction = model<ITransaction>("Transaction", TransactionSchema);
 
 export default Transaction;
