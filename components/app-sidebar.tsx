@@ -98,6 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     elements: {
                       avatarBox: "w-[1rem] h-[1rem] order-1",
                       userButtonOuterIdentifier: "p-0 order-2",
+                      userButtonTrigger: "focus:shadow-none",
                     },
                   }}
                 />

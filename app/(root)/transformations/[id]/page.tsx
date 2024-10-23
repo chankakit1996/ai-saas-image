@@ -1,3 +1,3 @@
-export default function TransformationsPage({ id }: { id: string }) {
-  return <div>123 TransformationsPage</div>;
+export default function TransformationsPage() {
+  return <div>TransformationsPage</div>;
 }
