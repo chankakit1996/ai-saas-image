@@ -126,5 +126,5 @@ export async function POST(req: Request) {
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log("Webhook body:", body);
 
-  handleClerkEvent(evt);
+  return handleClerkEvent(evt);
 }
