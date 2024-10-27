@@ -62,6 +62,19 @@ const deleteClerkUser = async (
   return NextResponse.json({ message: "OK", user: deletedUser });
 };
 
+const handleClerkEvent = async (evt: WebhookEvent) => {
+  switch (evt.type) {
+    case "user.created":
+      return createClerkUser(evt);
+    case "user.updated":
+      return updateClerkUser(evt);
+    case "user.deleted":
+      return deleteClerkUser(evt);
+    default:
+      return NextResponse.json({ message: "OK" });
+  }
+};
+
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -110,23 +123,8 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  // CREATE
-  if (eventType === "user.created") {
-    return createClerkUser(evt);
-  }
-
-  // UPDATE
-  if (eventType === "user.updated") {
-    return updateClerkUser(evt);
-  }
-
-  // DELETE
-  if (eventType === "user.deleted") {
-    return deleteClerkUser(evt);
-  }
-
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log("Webhook body:", body);
 
-  return new Response("", { status: 200 });
+  handleClerkEvent(evt);
 }
