@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   Settings2,
   House,
@@ -8,10 +8,10 @@ import {
   Camera,
   User as UserIcon,
   BriefcaseBusiness,
-} from "lucide-react";
-import Link from "next/link";
+} from 'lucide-react'
+import Link from 'next/link'
 
-import { NavMain } from "@/components/nav-main";
+import { NavMain } from '@/components/nav-main'
 import {
   Sidebar,
   SidebarContent,
@@ -20,56 +20,56 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
+} from '@/components/ui/sidebar'
+import { SignedOut, SignInButton, SignedIn, UserButton } from '@clerk/nextjs'
 
 // This is sample data.
 const data = {
   navMain: [
     {
-      title: "Home",
-      url: "#",
+      title: 'Home',
+      url: '/',
       icon: House,
     },
     {
-      title: "Image Restore",
-      url: "#",
+      title: 'Image Restore',
+      url: '/transformations/add/restore',
       icon: Image,
     },
     {
-      title: "Generative Fill",
-      url: "#",
+      title: 'Generative Fill',
+      url: '/transformations/add/fill',
       icon: Sparkles,
     },
     {
-      title: "Object Remove",
-      url: "#",
+      title: 'Object Remove',
+      url: '/transformations/add/remove',
       icon: LucideImageOff,
     },
     {
-      title: "Object Recolor",
-      url: "#",
+      title: 'Object Recolor',
+      url: '/transformations/add/recolor',
       icon: Settings2,
     },
     {
-      title: "Background Remove",
-      url: "#",
+      title: 'Background Remove',
+      url: '/transformations/add/removeBackground',
       icon: Camera,
     },
   ],
   navSecondary: [
     {
-      title: "Profile",
-      url: "#",
+      title: 'Profile',
+      url: '/profile',
       icon: UserIcon,
     },
     {
-      title: "Buy Credits",
-      url: "#",
+      title: 'Buy Credits',
+      url: '/credits',
       icon: BriefcaseBusiness,
     },
   ],
-};
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -77,10 +77,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size='lg' asChild>
               <Link
-                href="/"
-                className="sidebar-logo bg-logoSVG2 bg-no-repeat bg-contain"
+                href='/'
+                className='sidebar-logo bg-logoSVG2 bg-no-repeat bg-contain'
               />
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -89,16 +89,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SignedIn>
           <NavMain items={data.navMain} />
-          <NavMain items={data.navSecondary} className="mt-auto">
+          <NavMain items={data.navSecondary} className='mt-auto'>
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <UserButton
                   showName
                   appearance={{
                     elements: {
-                      avatarBox: "w-[1rem] h-[1rem] order-1",
-                      userButtonOuterIdentifier: "p-0 order-2",
-                      userButtonTrigger: "focus:shadow-none",
+                      avatarBox: 'w-[1rem] h-[1rem] order-1',
+                      userButtonOuterIdentifier: 'p-0 order-2',
+                      userButtonTrigger:
+                        'focus:shadow-none w-full justify-start',
+                      rootBox: 'w-full basis-full',
                     },
                   }}
                 />
@@ -116,5 +118,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

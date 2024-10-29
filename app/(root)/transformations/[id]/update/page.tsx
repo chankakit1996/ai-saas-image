@@ -1,5 +1,3 @@
 export default function UpdateTransformationPage() {
-    return (
-        <div>UpdateTransformationPage</div>
-    )
+  return <div>UpdateTransformationPage</div>
 }

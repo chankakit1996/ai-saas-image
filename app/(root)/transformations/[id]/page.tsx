@@ -1,3 +1,3 @@
 export default function TransformationsPage() {
-  return <div>TransformationsPage</div>;
+  return <div>TransformationsPage</div>
 }
