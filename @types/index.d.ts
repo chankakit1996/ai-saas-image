@@ -1,5 +1,14 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
 
+declare namespace globalThis {
+  import mongoose from 'mongoose'
+  // eslint-disable-next-line no-var, @typescript-eslint/no-explicit-any
+  var mongoose: {
+    conn: mongoose.Mongoose | null
+    promise: Promise<mongoose.Mon> | null
+  } // This must be a `var` and not a `let / const`
+}
+
 // ====== USER PARAMS
 declare type CreateUserParams = {
   clerkId: string

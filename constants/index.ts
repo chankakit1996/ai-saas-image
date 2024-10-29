@@ -76,7 +76,16 @@ export const plans = [
   },
 ]
 
-export const transformationTypes = {
+export const transformationTypes: Record<
+  TransformationTypeKey,
+  {
+    type: TransformationTypeKey
+    title: string
+    subTitle: string
+    config: Transformations
+    icon: string
+  }
+> = {
   restore: {
     type: 'restore',
     title: 'Restore Image',

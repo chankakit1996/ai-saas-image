@@ -15,6 +15,7 @@ import { NavMain } from '@/components/nav-main'
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -109,11 +110,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </NavMain>
         </SignedIn>
         <SignedOut>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
+          <SidebarGroup>
+            <SidebarMenu>
               <SignInButton />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
         </SignedOut>
       </SidebarContent>
       <SidebarRail />

@@ -1,15 +1,6 @@
 // Additional reference between user and image creation
 import { Schema, model, models } from 'mongoose'
 
-export interface ITransaction extends Document {
-  createdAt: Date
-  stripeId: string
-  amount: number
-  plan?: string // optional field
-  credits?: number // optional field
-  buyer?: string // optional field, representing ObjectId as string
-}
-
 const TransactionSchema = new Schema<ITransaction>(
   {
     stripeId: {
@@ -36,6 +27,7 @@ const TransactionSchema = new Schema<ITransaction>(
 )
 
 const Transaction =
-  models.Transaction || model<ITransaction>('Transaction', TransactionSchema)
+  models.Transaction<ITransaction> ||
+  model<ITransaction>('Transaction', TransactionSchema)
 
 export default Transaction

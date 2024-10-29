@@ -11,6 +11,7 @@ export default async function AddTransformationTypePage({
   params: { type },
 }: SearchParamProps) {
   const { userId } = auth()
+  const transformation = transformationTypes[type]
 
   if (!userId) {
     redirect('/')
@@ -21,7 +22,12 @@ export default async function AddTransformationTypePage({
     <>
       <Header {...transformationTypes[type]}></Header>
       <div className='flex flex-1 flex-col gap-4 p-4'>
-        <TransformationsForm action='Add' {...user} />
+        <TransformationsForm
+          action='Add'
+          userId={user._id}
+          type={transformation.type}
+          creditBalance={user.creditBalance}
+        />
       </div>
     </>
   )

@@ -1,16 +1,5 @@
 import { Schema, model, models } from 'mongoose'
 
-interface IUser extends Document {
-  clerkId: string
-  email: string
-  username: string
-  photo: string
-  firstName: string
-  lastName: string
-  planId: number
-  creditBalance: number
-}
-
 const UserSchema = new Schema<IUser>({
   clerkId: {
     type: String,
@@ -47,6 +36,6 @@ const UserSchema = new Schema<IUser>({
   },
 })
 
-const User = models.User ?? model<IUser>('User', UserSchema)
+const User = models.User<IUser> ?? model<IUser>('User', UserSchema)
 
 export default User
