@@ -1,3 +1,65 @@
+import {
+  Settings2,
+  House,
+  Image,
+  Sparkles,
+  LucideImageOff,
+  Camera,
+  User as UserIcon,
+  BriefcaseBusiness,
+  type LucideIcon,
+} from 'lucide-react'
+
+export const navLinks: {
+  navMain: { title: string; url: string; icon: LucideIcon }[]
+  navSecondary: { title: string; url: string; icon: LucideIcon }[]
+} = {
+  navMain: [
+    {
+      title: 'Home',
+      url: '/',
+      icon: House,
+    },
+    {
+      title: 'Image Restore',
+      url: '/transformations/add/restore',
+      icon: Image,
+    },
+    {
+      title: 'Generative Fill',
+      url: '/transformations/add/fill',
+      icon: Sparkles,
+    },
+    {
+      title: 'Object Remove',
+      url: '/transformations/add/remove',
+      icon: LucideImageOff,
+    },
+    {
+      title: 'Object Recolor',
+      url: '/transformations/add/recolor',
+      icon: Settings2,
+    },
+    {
+      title: 'Background Remove',
+      url: '/transformations/add/removeBackground',
+      icon: Camera,
+    },
+  ],
+  navSecondary: [
+    {
+      title: 'Profile',
+      url: '/profile',
+      icon: UserIcon,
+    },
+    {
+      title: 'Buy Credits',
+      url: '/credits',
+      icon: BriefcaseBusiness,
+    },
+  ],
+}
+
 export const plans = [
   {
     _id: 1,
@@ -83,7 +145,7 @@ export const transformationTypes: Record<
     title: string
     subTitle: string
     config: Transformations
-    icon: string
+    icon: LucideIcon
   }
 > = {
   restore: {
@@ -91,21 +153,21 @@ export const transformationTypes: Record<
     title: 'Restore Image',
     subTitle: 'Refine images by removing noise and imperfections',
     config: { restore: true },
-    icon: 'image.svg',
+    icon: Image,
   },
   removeBackground: {
     type: 'removeBackground',
     title: 'Background Remove',
     subTitle: 'Removes the background of the image using AI',
     config: { removeBackground: true },
-    icon: 'camera.svg',
+    icon: Camera,
   },
   fill: {
     type: 'fill',
     title: 'Generative Fill',
     subTitle: "Enhance an image's dimensions using AI outpainting",
     config: { fillBackground: true },
-    icon: 'stars.svg',
+    icon: Sparkles,
   },
   remove: {
     type: 'remove',
@@ -114,7 +176,7 @@ export const transformationTypes: Record<
     config: {
       remove: { prompt: '', removeShadow: true, multiple: true },
     },
-    icon: 'scan.svg',
+    icon: LucideImageOff,
   },
   recolor: {
     type: 'recolor',
@@ -123,7 +185,7 @@ export const transformationTypes: Record<
     config: {
       recolor: { prompt: '', to: '', multiple: true },
     },
-    icon: 'filter.svg',
+    icon: Settings2,
   },
 }
 

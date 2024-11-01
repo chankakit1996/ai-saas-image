@@ -20,7 +20,7 @@ export default async function AddTransformationTypePage({
   const user = await getUserById(userId)
   return (
     <>
-      <Header {...transformationTypes[type]}></Header>
+      <Header title={transformation.title} subTitle={transformation.subTitle} />
       <div className='flex flex-1 flex-col gap-4 p-4'>
         <TransformationsForm
           action='Add'

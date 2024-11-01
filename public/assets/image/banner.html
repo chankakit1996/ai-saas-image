@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .banner-container {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #00B4DB, #6B48FF);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .banner-text {
+            color: white;
+            max-width: 800px;
+        }
+
+        .banner-heading {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .banner-subtext {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background-color: white;
+            color: #6B48FF;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .banner-heading {
+                font-size: 2.5rem;
+            }
+            
+            .banner-subtext {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container" id="banner-container">
+        <div class="banner-text">
+            <h1 class="banner-heading">Transform Your Ideas Into Images</h1>
+            <p class="banner-subtext">Create stunning, unique images instantly with our AI-powered platform. Your imagination is the only limit.</p>
+            <a href="#" class="cta-button">Start Creating</a>
+        </div>
+    </div>
+</body>
+</html>

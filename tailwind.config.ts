@@ -99,6 +99,8 @@ const config: Config = {
         logo: "url('/assets/image/logo.png')",
         logoSVG: "url('/assets/image/logo.svg')",
         logoSVG2: "url('/assets/image/logo-cropped.svg')",
+        banner: "url('/assets/image/banner.png')",
+        
       },
     },
   },

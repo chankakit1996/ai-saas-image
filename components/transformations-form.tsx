@@ -119,8 +119,8 @@ export default function TransformationsForm({
               title: values.title,
               publicId: image.publicId,
               transformationType: type,
-              width: image.width,
-              height: image.height,
+              width: image.width!,
+              height: image.height!,
               config: transformationConfig,
               secureURL: image.secureURL,
               transformationURL: transformationUrl,
@@ -134,7 +134,7 @@ export default function TransformationsForm({
 
           if (newImage) {
             form.reset()
-            setImage(data)
+            setImage(image)
             router.push(`/transformations/${newImage._id}`)
           }
         } catch (error) {
@@ -147,10 +147,12 @@ export default function TransformationsForm({
           const updatedImage = await updateImage({
             image: {
               ...imageData,
-              _id: data._id,
+              width: imageData.width!,
+              height: imageData.height!,
+              _id: image._id,
             },
             userId,
-            path: `/transformations/${data._id}`,
+            path: `/transformations/${image._id}`,
           })
 
           if (updatedImage) {
@@ -216,6 +218,7 @@ export default function TransformationsForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <Card className='w-full'>
           <CardHeader>
             <CardTitle className='text-2xl'>Login</CardTitle>

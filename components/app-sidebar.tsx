@@ -1,15 +1,6 @@
 import * as React from 'react'
-import {
-  Settings2,
-  House,
-  Image,
-  Sparkles,
-  LucideImageOff,
-  Camera,
-  User as UserIcon,
-  BriefcaseBusiness,
-} from 'lucide-react'
 import Link from 'next/link'
+import { navLinks } from '@/constants'
 
 import { NavMain } from '@/components/nav-main'
 import {
@@ -23,54 +14,6 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { SignedOut, SignInButton, SignedIn, UserButton } from '@clerk/nextjs'
-
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: 'Home',
-      url: '/',
-      icon: House,
-    },
-    {
-      title: 'Image Restore',
-      url: '/transformations/add/restore',
-      icon: Image,
-    },
-    {
-      title: 'Generative Fill',
-      url: '/transformations/add/fill',
-      icon: Sparkles,
-    },
-    {
-      title: 'Object Remove',
-      url: '/transformations/add/remove',
-      icon: LucideImageOff,
-    },
-    {
-      title: 'Object Recolor',
-      url: '/transformations/add/recolor',
-      icon: Settings2,
-    },
-    {
-      title: 'Background Remove',
-      url: '/transformations/add/removeBackground',
-      icon: Camera,
-    },
-  ],
-  navSecondary: [
-    {
-      title: 'Profile',
-      url: '/profile',
-      icon: UserIcon,
-    },
-    {
-      title: 'Buy Credits',
-      url: '/credits',
-      icon: BriefcaseBusiness,
-    },
-  ],
-}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -89,8 +32,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SignedIn>
-          <NavMain items={data.navMain} />
-          <NavMain items={data.navSecondary} className='mt-auto'>
+          <NavMain items={navLinks.navMain} />
+          <NavMain items={navLinks.navSecondary} className='mt-auto'>
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <UserButton
