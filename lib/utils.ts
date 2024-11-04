@@ -91,12 +91,12 @@ export const debounce = (func: (...args: any[]) => void, delay: number) => {
 export type AspectRatioKey = keyof typeof aspectRatioOptions
 export const getImageSize = (
   type: string,
-  image: any,
+  image: IImage | Partial<IImage>,
   dimension: 'width' | 'height'
 ): number => {
   if (type === 'fill') {
     return (
-      aspectRatioOptions[image.aspectRatio as AspectRatioKey]?.[dimension] ||
+      aspectRatioOptions[image?.aspectRatio as AspectRatioKey]?.[dimension] ||
       1000
     )
   }
@@ -144,4 +144,14 @@ export function mergeDeep(target: any, ...sources: any[]) {
   }
 
   return mergeDeep(target, ...sources)
+}
+
+export function objectify<T>(_obj: T): T {
+  if (_obj === null || _obj === undefined) return _obj
+  if (typeof _obj === 'object') {
+    if (!Array.isArray(_obj)) {
+      return JSON.parse(JSON.stringify(_obj))
+    }
+  }
+  return _obj
 }

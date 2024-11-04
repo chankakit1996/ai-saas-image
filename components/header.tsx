@@ -13,7 +13,7 @@ export default function Header({
   title,
   subTitle,
   className,
-  ...props
+  ..._props
 }: {
   title: string
   subTitle?: string

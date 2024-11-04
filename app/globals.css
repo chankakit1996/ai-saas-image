@@ -154,7 +154,7 @@ body {
 
   /* 30 */
   .h3-bold {
-    @apply font-bold text-[30px] leading-[140%];
+    @apply font-bold text-[2rem] leading-[140%];
   }
 
   /* 24 */
@@ -341,13 +341,25 @@ body {
   .transformed-placeholder {
     @apply flex-center p-14-medium h-full min-h-72 flex-col gap-5 rounded-[16px] border border-dashed bg-purple-100/20 shadow-inner;
   }
-}
 
+  .search-input {
+    @apply border-0 bg-transparent w-full h-[50px] p-16-medium focus-visible:ring-offset-0 p-3 focus-visible:ring-transparent !important;
+  }
+
+  input,
+  button {
+    @apply focus-visible:ring-offset-0 focus-visible:ring-transparent focus:ring-offset-0 focus:ring-transparent !important;
+  }
+
+  .success-toast {
+    @apply bg-green-100 text-green-900;
+  }
+}
 
 .banner-container {
   width: 100%;
   height: 500px;
-  background: linear-gradient(135deg, #00B4DB, #6B48FF);
+  background: linear-gradient(135deg, #00b4db, #6b48ff);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -366,7 +378,7 @@ body {
 .banner-heading {
   font-size: 3.5rem;
   margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .banner-subtext {
@@ -379,7 +391,7 @@ body {
   padding: 15px 40px;
   font-size: 1.2rem;
   background-color: white;
-  color: #6B48FF;
+  color: #6b48ff;
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -390,15 +402,15 @@ body {
 
 .cta-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
   .banner-heading {
-      font-size: 2.5rem;
+    font-size: 2.5rem;
   }
-  
+
   .banner-subtext {
-      font-size: 1.2rem;
+    font-size: 1.2rem;
   }
 }

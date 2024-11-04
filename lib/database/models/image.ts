@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose'
+import { Model, Schema, model, models } from 'mongoose'
 
 const ImageSchema = new Schema<IImage>(
   {
@@ -20,6 +20,6 @@ const ImageSchema = new Schema<IImage>(
   }
 )
 
-const Image = models.Image<IImage> || model<IImage>('Image', ImageSchema)
+const Image: Model<IImage> = models.Image || model<IImage>('Image', ImageSchema)
 
 export default Image

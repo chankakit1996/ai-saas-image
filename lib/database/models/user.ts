@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose'
+import { Schema, model, models, Model } from 'mongoose'
 
 const UserSchema = new Schema<IUser>({
   clerkId: {
@@ -36,6 +36,6 @@ const UserSchema = new Schema<IUser>({
   },
 })
 
-const User = models.User<IUser> ?? model<IUser>('User', UserSchema)
+const User: Model<IUser> = models.User ?? model<IUser>('User', UserSchema)
 
 export default User

@@ -1,5 +1,5 @@
 // Additional reference between user and image creation
-import { Schema, model, models } from 'mongoose'
+import { Model, Schema, model, models } from 'mongoose'
 
 const TransactionSchema = new Schema<ITransaction>(
   {
@@ -26,8 +26,7 @@ const TransactionSchema = new Schema<ITransaction>(
   { timestamps: true }
 )
 
-const Transaction =
-  models.Transaction<ITransaction> ||
-  model<ITransaction>('Transaction', TransactionSchema)
+const Transaction: Model<ITransaction> =
+  models.Transaction || model<ITransaction>('Transaction', TransactionSchema)
 
 export default Transaction

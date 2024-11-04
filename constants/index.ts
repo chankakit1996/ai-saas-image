@@ -215,7 +215,7 @@ export const defaultValues = {
   aspectRatio: '',
   color: '',
   prompt: '',
-  publicId: '',
+  image: {},
 }
 
 export const creditFee = -1

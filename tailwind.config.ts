@@ -57,6 +57,12 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        dark: {
+          400: '#7986AC',
+          500: '#606C80',
+          600: '#2B3674',
+          700: '#384262',
+        },
         sidebar: {
           'DEFAULT': 'hsl(var(--sidebar-background))',
           'foreground': 'hsl(var(--sidebar-foreground))',
@@ -100,7 +106,6 @@ const config: Config = {
         logoSVG: "url('/assets/image/logo.svg')",
         logoSVG2: "url('/assets/image/logo-cropped.svg')",
         banner: "url('/assets/image/banner.png')",
-        
       },
     },
   },

@@ -2,7 +2,6 @@ import { Collection } from '@/components/collection'
 import Header from '@/components/header'
 import { navLinks } from '@/constants'
 import { getAllImages } from '@/lib/actions/image'
-import Image from 'next/image'
 import Link from 'next/link'
 
 const Home = async ({ searchParams }: SearchParamProps) => {
@@ -40,7 +39,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         </div>
       </div>
 
-      <section className='sm:mt-12 mx-5'>
+      <section className='sm:mt-6 m-5'>
         <Collection
           hasSearch={true}
           images={images?.data}

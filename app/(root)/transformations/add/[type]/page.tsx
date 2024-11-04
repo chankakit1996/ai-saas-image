@@ -1,5 +1,3 @@
-'use server'
-
 import Header from '@/components/header'
 import TransformationsForm from '@/components/transformations-form'
 import { transformationTypes } from '@/constants'
@@ -13,11 +11,10 @@ export default async function AddTransformationTypePage({
   const { userId } = auth()
   const transformation = transformationTypes[type]
 
-  if (!userId) {
+  const user = await getUserById(userId)
+  if (!user) {
     redirect('/')
   }
-
-  const user = await getUserById(userId)
   return (
     <>
       <Header title={transformation.title} subTitle={transformation.subTitle} />

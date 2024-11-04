@@ -2,19 +2,25 @@
 
 import { revalidatePath } from 'next/cache'
 import { dbConnect } from '../database/mongoose'
-import { handleError } from '../utils'
+import { handleError, objectify } from '../utils'
 import User from '../database/models/user'
 import Image from '../database/models/image'
 import { redirect } from 'next/navigation'
 
 import { v2 as cloudinary } from 'cloudinary'
+import { Query } from 'mongoose'
 
-const populateUser = (query: any) =>
-  query.populate({
-    path: 'author',
-    model: User,
-    select: '_id firstName lastName clerkId',
-  })
+const populateUser = <T>(query: T): T => {
+  if (query instanceof Query) {
+    return query.populate({
+      path: 'author',
+      model: User,
+      select: '_id firstName lastName clerkId',
+    })
+  }
+
+  throw new Error('parameter must be an instance of Query')
+}
 
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
@@ -34,7 +40,7 @@ export async function addImage({ image, userId, path }: AddImageParams) {
 
     revalidatePath(path)
 
-    return JSON.parse(JSON.stringify(newImage))
+    return objectify(newImage)
   } catch (error) {
     handleError(error)
   }
@@ -59,7 +65,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
     revalidatePath(path)
 
-    return JSON.parse(JSON.stringify(updatedImage))
+    return objectify(updatedImage)
   } catch (error) {
     handleError(error)
   }
@@ -87,7 +93,7 @@ export async function getImageById(imageId: string) {
 
     if (!image) throw new Error('Image not found')
 
-    return JSON.parse(JSON.stringify(image))
+    return objectify(image)
   } catch (error) {
     handleError(error)
   }
@@ -123,7 +129,7 @@ export async function getAllImages({
       .expression(expression)
       .execute()
 
-    const resourceIds = resources.map((resource: any) => resource.public_id)
+    const resourceIds = resources.map((resource: any) => resource.public_id) // eslint-disable-line @typescript-eslint/no-explicit-any
 
     let query = {}
 
@@ -146,7 +152,7 @@ export async function getAllImages({
     const savedImages = await Image.find().countDocuments()
 
     return {
-      data: JSON.parse(JSON.stringify(images)),
+      data: objectify(images),
       totalPage: Math.ceil(totalImages / limit),
       savedImages,
     }
@@ -178,7 +184,7 @@ export async function getUserImages({
     const totalImages = await Image.find({ author: userId }).countDocuments()
 
     return {
-      data: JSON.parse(JSON.stringify(images)),
+      data: objectify(images),
       totalPages: Math.ceil(totalImages / limit),
     }
   } catch (error) {

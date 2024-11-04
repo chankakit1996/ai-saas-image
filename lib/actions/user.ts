@@ -19,7 +19,7 @@ export async function createUser(user: CreateUserParams) {
   }
 }
 
-export async function getUserById(userId: string) {
+export async function getUserById(userId: string | null) {
   try {
     await dbConnect()
 

@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  // CardTitle,
 } from '@/components/ui/card'
 import {
   Select,
@@ -44,22 +44,39 @@ import TransformedImage from './transformed-image'
 import { getCldImageUrl } from 'next-cloudinary'
 import router from 'next/router'
 import { addImage, updateImage } from '@/lib/actions/image'
+import InsufficientCreditsModal from './insufficient-credits-modal'
+import { useToast } from '@/hooks/use-toast'
 
 export const formSchema = z.object({
   title: z.string(),
   aspectRatio: z.string().optional(),
   color: z.string().optional(),
   prompt: z.string().optional(),
-  publicId: z.string(),
+  image: z
+    .object({
+      aspectRatio: z.string(),
+      width: z.number(),
+      height: z.number(),
+      publicId: z.string(),
+      secureURL: z.string(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.publicId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Public ID is required',
+        })
+      }
+    }),
 })
 
-export const description =
-  "A simple login form with email and password. The submit button says 'Sign in'."
+// export const description =
+//   "A simple login form with email and password. The submit button says 'Sign in'."
 
-export const iframeHeight = '600px'
+// export const iframeHeight = '600px'
 
-export const containerClassName =
-  'w-full h-screen flex items-center justify-center px-4'
+// export const containerClassName =
+//   'w-full h-screen flex items-center justify-center px-4'
 
 export default function TransformationsForm({
   action,
@@ -69,60 +86,46 @@ export default function TransformationsForm({
   creditBalance,
   config: _config,
 }: TransformationFormProps) {
-  const data = _data ?? null
   const config = _config ?? null
 
-  const initalValues = data && action === 'Update' ? data : defaultValues
+  const initalValues = _data && action === 'Update' ? _data : defaultValues
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initalValues,
   })
   const transformationType = transformationTypes[type]
-  const [image, setImage] = useState(data)
+  const [image, setImage] = useState(initalValues.image)
   const [newTransformation, setNewTransformation] =
     useState<Transformations | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isTransforming, setIsTransforming] = useState(false)
   const [transformationConfig, setTransformationConfig] = useState(config)
-  const [isPending, startTransition] = useTransition()
+  const [_isPending, startTransition] = useTransition()
+  const { toast } = useToast()
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
 
-    if (image) {
-      const transformationUrl = getCldImageUrl({
-        width: image?.width,
-        height: image?.height,
-        src: image?.publicId,
-        ...transformationConfig,
-      })
-
-      const imageData = {
-        title: values.title,
-        publicId: image.publicId,
-        transformationType: type,
-        width: image.width,
-        height: image.height,
-        config: transformationConfig,
-        secureURL: image.secureURL,
-        transformationURL: transformationUrl,
-        aspectRatio: values.aspectRatio,
-        prompt: values.prompt,
-        color: values.color,
-      }
-
+    try {
       if (action === 'Add') {
+        const transformationUrl = getCldImageUrl({
+          width: values.image.width,
+          height: values.image.height,
+          src: values.image.publicId,
+          ...transformationConfig,
+        })
+
         try {
           const newImage = await addImage({
             image: {
               title: values.title,
-              publicId: image.publicId,
+              publicId: values.image.publicId,
               transformationType: type,
-              width: image.width!,
-              height: image.height!,
+              width: values.image.width,
+              height: values.image.height,
               config: transformationConfig,
-              secureURL: image.secureURL,
+              secureURL: values.image.secureURL,
               transformationURL: transformationUrl,
               aspectRatio: values.aspectRatio,
               prompt: values.prompt,
@@ -143,16 +146,37 @@ export default function TransformationsForm({
       }
 
       if (action === 'Update') {
+        const _values = values as typeof values & { image: IImage }
+        const transformationUrl = getCldImageUrl({
+          width: values.image.width,
+          height: values.image.height,
+          src: values.image.publicId,
+          ...transformationConfig,
+        })
+
+        const imageData = {
+          title: values.title,
+          publicId: values.image.publicId,
+          transformationType: type,
+          width: values.image.width,
+          height: values.image.height,
+          config: transformationConfig,
+          secureURL: values.image.secureURL,
+          transformationURL: transformationUrl,
+          aspectRatio: values.aspectRatio,
+          prompt: values.prompt,
+          color: values.color,
+        }
         try {
           const updatedImage = await updateImage({
             image: {
               ...imageData,
-              width: imageData.width!,
-              height: imageData.height!,
-              _id: image._id,
+              width: imageData.width,
+              height: imageData.height,
+              _id: _values.image._id,
             },
             userId,
-            path: `/transformations/${image._id}`,
+            path: `/transformations/${_values.image._id}`,
           })
 
           if (updatedImage) {
@@ -162,6 +186,21 @@ export default function TransformationsForm({
           console.log(error)
         }
       }
+
+      toast({
+        title: 'Success!',
+        description: 'Your image was successfully transformed.',
+        duration: 5000,
+        className: 'success-toast',
+      })
+    } catch (_err) {
+      toast({
+        title: 'Something went wrong while uploading',
+        description: 'Please try again',
+        duration: 5000,
+        className: 'error-toast',
+        variant: 'destructive',
+      })
     }
 
     setIsSubmitting(false)
@@ -172,12 +211,18 @@ export default function TransformationsForm({
   ) => {
     const imageSize = aspectRatioOptions[value as AspectRatioKey]
 
-    setImage((prevState: any) => ({
-      ...prevState,
-      aspectRatio: imageSize.aspectRatio,
-      width: imageSize.width,
-      height: imageSize.height,
-    }))
+    setImage((prevState) => {
+      if (prevState) {
+        return {
+          ...prevState,
+          aspectRatio: imageSize.aspectRatio,
+          width: imageSize.width,
+          height: imageSize.height,
+        }
+      }
+
+      return prevState
+    })
 
     setNewTransformation(transformationType.config)
 
@@ -187,11 +232,11 @@ export default function TransformationsForm({
   const onInputChangeHandler = (
     fieldName: string,
     value: string,
-    type: string,
+    type: 'remove' | 'recolor',
     onChangeField: (value: string) => void
   ) => {
     debounce(() => {
-      setNewTransformation((prevState: any) => ({
+      setNewTransformation((prevState) => ({
         ...prevState,
         [type]: {
           ...prevState?.[type],
@@ -221,10 +266,10 @@ export default function TransformationsForm({
         {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <Card className='w-full'>
           <CardHeader>
-            <CardTitle className='text-2xl'>Login</CardTitle>
+            {/* <CardTitle className='text-2xl'>Login</CardTitle>
             <CardDescription>
               Enter your email below to login to your account.
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
           <CardContent className='grid gap-4'>
             <FormField
@@ -234,7 +279,7 @@ export default function TransformationsForm({
                 <FormItem>
                   <FormLabel>Image Title</FormLabel>
                   <FormControl>
-                    <Input {...field} className='input-field' />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -340,15 +385,14 @@ export default function TransformationsForm({
             <div className='media-uploader-field'>
               <FormField
                 control={form.control}
-                name='publicId'
+                name='image'
                 render={({ field }) => (
                   <FormItem className='flex size-full flex-col'>
                     <FormControl>
                       <MediaUploader
                         onValueChange={field.onChange}
                         setImage={setImage}
-                        publicId={field.value}
-                        image={image}
+                        image={field.value}
                         type={type}
                       />
                     </FormControl>

@@ -1,16 +1,13 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-explicit-any */
-
-import { ObjectId } from 'mongoose'
-
 declare global {
-  import { type Mongoose, type Document } from 'mongoose'
+  import { type Mongoose } from 'mongoose'
   // eslint-disable-next-line no-var, @typescript-eslint/no-explicit-any
   var mongoose: {
     conn: Mongoose | null
     promise: Promise<Mongoose> | null
   } // This must be a `var` and not a `let / const`
 
-  declare interface IUser extends Document {
+  declare interface IUser {
     clerkId: string
     email: string
     username: string
@@ -22,7 +19,7 @@ declare global {
     _id: string
   }
 
-  declare interface ITransaction extends Document {
+  declare interface ITransaction {
     createdAt: Date
     stripeId: string
     amount: number
@@ -32,27 +29,29 @@ declare global {
     _id: string
   }
 
-  declare interface IImage extends Document {
+  declare interface IImage {
     title: string
     transformationType: string
     publicId: string
     secureURL: string
-    width?: number
-    height?: number
-    config?: object
-    transformationUrl?: string
-    aspectRatio?: string
-    color?: string
-    prompt?: string
-    author: {
-      _id: string
-      firstName: string
-      lastName: string
-    }
+    width: number
+    height: number
+    config: object
+    transformationUrl: string
+    aspectRatio: string
+    color: string
+    prompt: string
+    author: IAuthor
     _id: string
   }
 
-  // ====== USER PARAMS
+  declare interface IAuthor {
+    _id: string
+    firstName: string
+    lastName: string
+    clerkId: string
+  }
+
   declare type CreateUserParams = {
     clerkId: string
     email: string
@@ -175,7 +174,21 @@ declare global {
     userId: string
     type: TransformationTypeKey
     creditBalance: number
-    data?: IImage | null
+    data?: {
+      title: string
+      aspectRatio: string
+      color: string
+      prompt: string
+      image: {
+        publicId?: sting
+        transformationType?: sting
+        width?: number
+        height?: number
+        config?: sting
+        secureURL?: sting
+        transformationURL?: sting
+      }
+    }
     config?: Transformations | null
   }
 
