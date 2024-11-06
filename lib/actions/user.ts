@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import User from '../database/models/user'
 import { dbConnect } from '../database/mongoose'
-import { handleError } from '../utils'
+import { handleError, objectify } from '../utils'
 
 // Make sure it has an image that create a user
 export async function createUser(user: CreateUserParams) {
@@ -13,7 +13,7 @@ export async function createUser(user: CreateUserParams) {
 
     const newUser = await User.create(user)
 
-    return JSON.parse(JSON.stringify(newUser)) as typeof newUser
+    return objectify(newUser)
   } catch (error) {
     handleError(error)
   }
@@ -43,7 +43,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
     if (!updatedUser) throw new Error('User update failed')
 
-    return JSON.parse(JSON.stringify(updatedUser)) as typeof updateUser
+    return objectify(updatedUser)
   } catch (error) {
     handleError(error)
   }
@@ -84,9 +84,7 @@ export async function updateCredits(userId: string, creditFee: number) {
 
     if (!updatedUserCredits) throw new Error('User credits update failed')
 
-    return JSON.parse(
-      JSON.stringify(updatedUserCredits)
-    ) as typeof updatedUserCredits
+    return objectify(updatedUserCredits)
   } catch (error) {
     handleError(error)
   }

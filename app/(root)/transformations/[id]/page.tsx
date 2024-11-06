@@ -11,13 +11,14 @@ import { DeleteConfirmation } from '@/components/delete-confirmation'
 import { useToast } from '@/hooks/use-toast'
 import { redirect } from 'next/navigation'
 import { useAsyncHook } from '@/hooks/use-async'
+import { useState } from 'react'
 
 const ImageDetails = ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth()
   const { toast } = useToast()
-  const [image] = useAsyncHook(getImageById(id))
+  const [image, isLoading] = useAsyncHook(getImageById(id))
 
-  if (!image) {
+  if (!isLoading && !image) {
     toast({
       title: 'Image not found',
       description: 'The image you are looking for does not exist.',
@@ -27,7 +28,7 @@ const ImageDetails = ({ params: { id } }: SearchParamProps) => {
     redirect('/')
   }
 
-  return (
+  return !isLoading && image ? (
     <>
       <Header title={image.title} />
 
@@ -109,6 +110,8 @@ const ImageDetails = ({ params: { id } }: SearchParamProps) => {
         )}
       </section>
     </>
+  ) : (
+    {}
   )
 }
 

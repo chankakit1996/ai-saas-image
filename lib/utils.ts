@@ -103,6 +103,20 @@ export const getImageSize = (
   return image?.[dimension] || 1000
 }
 
+export const getImageSizeWithAspectRatio = (
+  type: string,
+  aspectRatio: string | undefined,
+  image: IImage | Partial<IImage>,
+  dimension: 'width' | 'height'
+): number => {
+  if (type === 'fill') {
+    return (
+      aspectRatioOptions[aspectRatio as AspectRatioKey]?.[dimension] || 1000
+    )
+  }
+  return image?.[dimension] || 1000
+}
+
 // DOWNLOAD IMAGE
 export const download = (url: string, filename: string) => {
   if (!url) {
@@ -155,3 +169,15 @@ export function objectify<T>(_obj: T): T {
   }
   return _obj
 }
+
+interface OriginalType {
+  public_id?: string | undefined
+  width?: number | undefined
+  height?: number | undefined
+  secure_url?: string | undefined
+}
+export type RequiredType<T> = {
+  [K in keyof T]-?: Exclude<T[K], 'undefined' | null>
+}
+
+type ImageData = RequiredType<OriginalType>

@@ -180,13 +180,13 @@ declare global {
       color: string
       prompt: string
       image: {
-        publicId?: sting
-        transformationType?: sting
+        publicId?: string
+        transformationType?: string
         width?: number
         height?: number
-        config?: sting
-        secureURL?: sting
-        transformationURL?: sting
+        config?: object
+        secureURL?: string
+        transformationURL?: string
       }
     }
     config?: Transformations | null

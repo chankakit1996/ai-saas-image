@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 
-export function useAsyncHook<T>(promiseFn: Promise<T>): [T | null, string] {
+export function useAsyncHook<T>(promiseFn: Promise<T>): [T | null, boolean] {
   const [result, setResult] = useState<T | null>(null)
-  const [loading, setLoading] = useState('false')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     async function _fetch() {
       try {
-        setLoading('true')
+        setLoading(true)
         const response = await promiseFn
 
         if (response instanceof Response) {
@@ -17,7 +17,7 @@ export function useAsyncHook<T>(promiseFn: Promise<T>): [T | null, string] {
         }
       } catch (error) {
         console.error(error)
-        setLoading('null')
+        setLoading(false)
       }
     }
 

@@ -37,7 +37,7 @@ import {
   transformationTypes,
 } from '@/constants'
 import { useState, useTransition } from 'react'
-import { AspectRatioKey, debounce, mergeDeep } from '@/lib/utils'
+import { AspectRatioKey, debounce, mergeDeep, RequiredType } from '@/lib/utils'
 import { updateCredits } from '@/lib/actions/user'
 import MediaUploader from './media-uploaded'
 import TransformedImage from './transformed-image'
@@ -47,27 +47,46 @@ import { addImage, updateImage } from '@/lib/actions/image'
 import InsufficientCreditsModal from './insufficient-credits-modal'
 import { useToast } from '@/hooks/use-toast'
 
+const imageSchema = z
+  .object({
+    aspectRatio: z.string().optional(),
+    width: z.number(),
+    height: z.number(),
+    publicId: z.string(),
+    secureURL: z.string(),
+  })
+  .partial()
+  .superRefine((_data, ctx) => {
+    const data = _data as {
+      aspectRatio: string
+      width: number
+      height: number
+      publicId: string
+      secureURL: string
+    }
+    const isMissing =
+      !data ||
+      !data.publicId ||
+      !data.width ||
+      data.width <= 0 ||
+      !data.height ||
+      data.height <= 0 ||
+      !data.secureURL
+
+    if (isMissing) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Image is missing',
+      })
+    }
+  })
+
 export const formSchema = z.object({
   title: z.string(),
   aspectRatio: z.string().optional(),
   color: z.string().optional(),
   prompt: z.string().optional(),
-  image: z
-    .object({
-      aspectRatio: z.string(),
-      width: z.number(),
-      height: z.number(),
-      publicId: z.string(),
-      secureURL: z.string(),
-    })
-    .superRefine((data, ctx) => {
-      if (!data.publicId) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Public ID is required',
-        })
-      }
-    }),
+  image: imageSchema,
 })
 
 // export const description =
@@ -93,6 +112,8 @@ export default function TransformationsForm({
     resolver: zodResolver(formSchema),
     defaultValues: initalValues,
   })
+  const { register, handleSubmit, setValue, formState, reset: formReset } = form
+  const { errors } = formState
   const transformationType = transformationTypes[type]
   const [image, setImage] = useState(initalValues.image)
   const [newTransformation, setNewTransformation] =
@@ -104,7 +125,13 @@ export default function TransformationsForm({
   const { toast } = useToast()
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(_values: z.infer<typeof formSchema>) {
+    // not sure if it's a bug of zod
+    // that need to use partial to use superRefine
+    // thus need to use RequiredType for type casting
+    const values = _values as z.infer<typeof formSchema> & {
+      image: RequiredType<z.infer<typeof formSchema>['image']>
+    }
     setIsSubmitting(true)
 
     try {
@@ -279,7 +306,7 @@ export default function TransformationsForm({
                 <FormItem>
                   <FormLabel>Image Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -387,27 +414,51 @@ export default function TransformationsForm({
                 control={form.control}
                 name='image'
                 render={({ field }) => (
-                  <FormItem className='flex size-full flex-col'>
-                    <FormControl>
-                      <MediaUploader
-                        onValueChange={field.onChange}
-                        setImage={setImage}
-                        image={field.value}
+                  <>
+                    <FormItem className='flex size-full flex-col'>
+                      <FormLabel
+                        className={
+                          errors.image?.message
+                            ? 'h3-bold'
+                            : 'h3-bold text-dark-600'
+                        }
+                      >
+                        Original
+                      </FormLabel>
+                      <FormControl>
+                        <MediaUploader
+                          onValueChange={field.onChange}
+                          setImage={setImage}
+                          image={field.value}
+                          type={type}
+                        />
+                      </FormControl>
+                      <FormMessage>{errors.image?.message}</FormMessage>
+                    </FormItem>
+                    <FormItem className='flex size-full flex-col'>
+                      <FormLabel
+                        className={
+                          errors.image?.message
+                            ? 'h3-bold'
+                            : 'h3-bold text-dark-600'
+                        }
+                      >
+                        Transformed
+                      </FormLabel>
+                      <TransformedImage
+                        image={image}
                         type={type}
+                        title={form.getValues().title}
+                        isTransforming={isTransforming}
+                        setIsTransforming={setIsTransforming}
+                        transformationConfig={transformationConfig}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                      <FormMessage className='md:invisible hidden'>
+                        {errors.image?.message}
+                      </FormMessage>
+                    </FormItem>
+                  </>
                 )}
-              />
-
-              <TransformedImage
-                image={image}
-                type={type}
-                title={form.getValues().title}
-                isTransforming={isTransforming}
-                setIsTransforming={setIsTransforming}
-                transformationConfig={transformationConfig}
               />
             </div>
           </CardContent>
@@ -416,7 +467,12 @@ export default function TransformationsForm({
               <Button
                 type='button'
                 className='submit-button capitalize'
-                disabled={isTransforming || newTransformation === null}
+                disabled={
+                  isTransforming ||
+                  newTransformation === null ||
+                  !Boolean(form.getValues().image.publicId) ||
+                  form.getValues().image.publicId === ''
+                }
                 onClick={onTransformHandler}
               >
                 {isTransforming ? 'Transforming...' : 'Apply Transformation'}

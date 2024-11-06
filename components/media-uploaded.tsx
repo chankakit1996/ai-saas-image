@@ -12,7 +12,12 @@ import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props'
 import { Plus } from 'lucide-react'
 
 type MediaUploaderProps = {
-  onValueChange: (value: string) => void
+  onValueChange: (value: {
+    publicId?: string
+    width?: number
+    height?: number
+    secureURL?: string
+  }) => void
   setImage: React.Dispatch<
     React.SetStateAction<NonNullable<TransformationFormProps['data']>['image']>
   >
@@ -29,8 +34,9 @@ const MediaUploader = ({
   const { toast } = useToast()
 
   const onUploadSuccessHandler = (result: CloudinaryUploadWidgetResults) => {
+    console.log(result)
+    const info = result?.info as CloudinaryUploadWidgetInfo
     setImage((prevState) => {
-      const info = result?.info as CloudinaryUploadWidgetInfo
       return {
         ...prevState,
         publicId: info?.public_id,
@@ -40,7 +46,12 @@ const MediaUploader = ({
       }
     })
 
-    onValueChange((result?.info as CloudinaryUploadWidgetInfo)?.public_id)
+    onValueChange({
+      publicId: info?.public_id,
+      width: info?.width,
+      height: info?.height,
+      secureURL: info?.secure_url,
+    })
 
     toast({
       title: 'Image uploaded successfully',
@@ -60,6 +71,8 @@ const MediaUploader = ({
   }
 
   return (
+    // TODO
+    // change upload preset to env variable
     <CldUploadWidget
       uploadPreset='owtktu1h_pickure'
       options={{
@@ -71,8 +84,6 @@ const MediaUploader = ({
     >
       {({ open }) => (
         <div className='flex flex-col gap-4'>
-          <h3 className='h3-bold text-dark-600'>Original</h3>
-
           {image.publicId ? (
             <>
               <div className='cursor-pointer overflow-hidden rounded-[10px]'>
