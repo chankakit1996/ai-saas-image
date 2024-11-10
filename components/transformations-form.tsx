@@ -42,7 +42,7 @@ import { updateCredits } from '@/lib/actions/user'
 import MediaUploader from './media-uploaded'
 import TransformedImage from './transformed-image'
 import { getCldImageUrl } from 'next-cloudinary'
-import router from 'next/router'
+import { useRouter } from 'next/navigation'
 import { addImage, updateImage } from '@/lib/actions/image'
 import InsufficientCreditsModal from './insufficient-credits-modal'
 import { useToast } from '@/hooks/use-toast'
@@ -112,6 +112,8 @@ export default function TransformationsForm({
     resolver: zodResolver(formSchema),
     defaultValues: initalValues,
   })
+  // disable for hinting purposes only
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const { register, handleSubmit, setValue, formState, reset: formReset } = form
   const { errors } = formState
   const transformationType = transformationTypes[type]
@@ -123,6 +125,7 @@ export default function TransformationsForm({
   const [transformationConfig, setTransformationConfig] = useState(config)
   const [_isPending, startTransition] = useTransition()
   const { toast } = useToast()
+  const router = useRouter()
 
   // 2. Define a submit handler.
   async function onSubmit(_values: z.infer<typeof formSchema>) {

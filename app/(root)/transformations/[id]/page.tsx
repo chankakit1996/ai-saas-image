@@ -8,28 +8,26 @@ import { Button } from '@/components/ui/button'
 import { getImageById } from '@/lib/actions/image'
 import { getImageSize } from '@/lib/utils'
 import { DeleteConfirmation } from '@/components/delete-confirmation'
-import { useToast } from '@/hooks/use-toast'
+// import { useToast } from '@/hooks/use-toast'
 import { redirect } from 'next/navigation'
-import { useAsyncHook } from '@/hooks/use-async'
-import { useState } from 'react'
 
-const ImageDetails = ({ params: { id } }: SearchParamProps) => {
+const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth()
-  const { toast } = useToast()
-  const [image, isLoading] = useAsyncHook(getImageById(id))
+  // const { toast } = useToast()
+  const image = await getImageById(id)
 
-  if (!isLoading && !image) {
-    toast({
-      title: 'Image not found',
-      description: 'The image you are looking for does not exist.',
-      duration: 5000,
-      className: 'error-toast',
-    })
+  if (!image) {
+    // toast({
+    //   title: 'Image not found',
+    //   description: 'The image you are looking for does not exist.',
+    //   duration: 5000,
+    //   className: 'error-toast',
+    // })
     redirect('/')
   }
 
-  return !isLoading && image ? (
-    <>
+  return (
+    <div className='px-4'>
       <Header title={image.title} />
 
       <section className='mt-5 flex flex-wrap gap-4'>
@@ -99,7 +97,11 @@ const ImageDetails = ({ params: { id } }: SearchParamProps) => {
 
         {userId === image.author.clerkId && (
           <div className='mt-4 space-y-4'>
-            <Button asChild type='button' className='submit-button capitalize'>
+            <Button
+              asChild
+              type='button'
+              className='capitalize w-full rounded-full button h-[44px] md:h-[54px]'
+            >
               <Link href={`/transformations/${image._id}/update`}>
                 Update Image
               </Link>
@@ -109,9 +111,7 @@ const ImageDetails = ({ params: { id } }: SearchParamProps) => {
           </div>
         )}
       </section>
-    </>
-  ) : (
-    {}
+    </div>
   )
 }
 

@@ -135,9 +135,16 @@ export async function getAllImages({
 
     if (searchQuery) {
       query = {
-        publicId: {
-          $in: resourceIds,
-        },
+        $or: [
+          {
+            publicId: {
+              $in: resourceIds,
+            },
+          },
+          {
+            title: { $regex: searchQuery, $options: 'i' },
+          },
+        ],
       }
     }
 

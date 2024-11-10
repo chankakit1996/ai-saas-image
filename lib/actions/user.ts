@@ -27,7 +27,7 @@ export async function getUserById(userId: string | null) {
 
     if (!user) throw new Error('User not found')
 
-    return JSON.parse(JSON.stringify(user)) as typeof user
+    return objectify(user)
   } catch (error) {
     handleError(error)
   }

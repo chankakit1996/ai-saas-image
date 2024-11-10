@@ -23,7 +23,7 @@ export const Collection = ({
   totalPages = 1,
   page,
 }: {
-  images: IImage[]
+  images: IImage[] | undefined
   totalPages?: number
   page: number
   hasSearch?: boolean
@@ -51,7 +51,7 @@ export const Collection = ({
         {hasSearch && <Search />}
       </div>
 
-      {images.length > 0 ? (
+      {images && images.length > 0 ? (
         <ul className='collection-list'>
           {images.map((image) => (
             <Card image={image} key={image._id} />

@@ -16,9 +16,9 @@ export default async function AddTransformationTypePage({
     redirect('/')
   }
   return (
-    <>
+    <div className='px-4'>
       <Header title={transformation.title} subTitle={transformation.subTitle} />
-      <div className='flex flex-1 flex-col gap-4 p-4'>
+      <div className='flex flex-1 flex-col gap-4 py-4'>
         <TransformationsForm
           action='Add'
           userId={user._id}
@@ -26,6 +26,6 @@ export default async function AddTransformationTypePage({
           creditBalance={user.creditBalance}
         />
       </div>
-    </>
+    </div>
   )
 }

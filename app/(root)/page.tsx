@@ -12,7 +12,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
 
   return (
     <>
-      <Header className='absolute' title='Home' />
+      <Header className='absolute left-4' title='Home' />
       <div className='banner-container' id='banner-container'>
         <div className='banner-text'>
           <h1 className='banner-heading'>Transform Your Ideas Into Images</h1>

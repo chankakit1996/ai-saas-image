@@ -35,6 +35,7 @@ const TransformedImage = ({
     <div className='flex flex-col gap-4'>
       {hasDownload && (
         <div className='flex-between'>
+          <h3 className='h3-bold text-dark-600'>Transformed</h3>
           <button className='download-btn' onClick={downloadHandler}>
             <Download width={24} height={24} className='pb-[6px]' />
           </button>

@@ -163,21 +163,11 @@ export function mergeDeep(target: any, ...sources: any[]) {
 export function objectify<T>(_obj: T): T {
   if (_obj === null || _obj === undefined) return _obj
   if (typeof _obj === 'object') {
-    if (!Array.isArray(_obj)) {
-      return JSON.parse(JSON.stringify(_obj))
-    }
+    return JSON.parse(JSON.stringify(_obj))
   }
   return _obj
 }
 
-interface OriginalType {
-  public_id?: string | undefined
-  width?: number | undefined
-  height?: number | undefined
-  secure_url?: string | undefined
-}
 export type RequiredType<T> = {
   [K in keyof T]-?: Exclude<T[K], 'undefined' | null>
 }
-
-type ImageData = RequiredType<OriginalType>

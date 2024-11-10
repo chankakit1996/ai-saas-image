@@ -25,7 +25,7 @@ export default function Header({
         'flex flex-wrap py-[1rem] shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'
       )}
     >
-      <div className='flex items-center gap-2 px-4 w-full basis-full'>
+      <div className='flex items-center gap-2 w-full basis-full'>
         <SidebarTrigger className='-ml-1' />
         <Separator orientation='vertical' className='mr-2 h-4' />
         <Breadcrumb>
@@ -37,7 +37,7 @@ export default function Header({
         </Breadcrumb>
       </div>
       {subTitle && (
-        <div className='flex items-center gap-2 px-4 w-full basis-full'>
+        <div className='flex items-center gap-2 w-full basis-full'>
           <p className='text-sm text-muted-foreground'>{subTitle}</p>
         </div>
       )}
