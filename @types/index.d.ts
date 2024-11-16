@@ -187,6 +187,7 @@ declare global {
         config?: object
         secureURL?: string
         transformationURL?: string
+        _id?: string
       }
     }
     config?: Transformations | null

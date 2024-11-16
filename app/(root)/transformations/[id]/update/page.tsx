@@ -3,9 +3,10 @@ import { redirect } from 'next/navigation'
 
 import Header from '@/components/header'
 import TransformationForm from '@/components/transformations-form'
-import { transformationTypes } from '@/constants'
+import { creditFee, transformationTypes } from '@/constants'
 import { getUserById } from '@/lib/actions/user'
 import { getImageById } from '@/lib/actions/image'
+import InsufficientCreditsModal from '@/components/insufficient-credits-modal'
 
 const Page = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth()
@@ -13,26 +14,41 @@ const Page = async ({ params: { id } }: SearchParamProps) => {
   const user = await getUserById(userId)
   if (!userId || !user) redirect('/sign-in')
   const image: IImage | undefined = await getImageById(id)
-  if (userId === image?.author.clerkId || !image) redirect('/')
+  if (!(userId === image?.author.clerkId) || !image) redirect('/')
+  const { _id, creditBalance } = user
+  const { config, title, aspectRatio, prompt, color, transformationUrl } = image
 
   const transformation =
     transformationTypes[image.transformationType as TransformationTypeKey]
 
   return (
-    <>
+    <div className='px-4'>
       <Header title={transformation.title} subTitle={transformation.subTitle} />
 
       <section className='mt-10'>
-        <TransformationForm
-          action='Update'
-          userId={user._id}
-          type={image.transformationType as TransformationTypeKey}
-          creditBalance={user.creditBalance}
-          config={image.config}
-          data={image}
-        />
+        {creditBalance < Math.abs(creditFee) ? (
+          <InsufficientCreditsModal />
+        ) : (
+          <TransformationForm
+            action='Update'
+            userId={_id}
+            type={image.transformationType as TransformationTypeKey}
+            creditBalance={creditBalance}
+            config={config}
+            data={{
+              title,
+              aspectRatio,
+              color,
+              prompt,
+              image: {
+                ...image,
+                transformationURL: transformationUrl,
+              },
+            }}
+          />
+        )}
       </section>
-    </>
+    </div>
   )
 }
 

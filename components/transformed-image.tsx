@@ -48,7 +48,7 @@ const TransformedImage = ({
             width={getImageSize(type, image, 'width')}
             height={getImageSize(type, image, 'height')}
             src={image?.publicId}
-            alt={image.title}
+            alt={image.title || 'Image'}
             sizes={'(max-width: 767px) 100vw, 50vw'}
             placeholder={dataUrl as PlaceholderValue}
             className='transformed-image'
@@ -64,7 +64,7 @@ const TransformedImage = ({
           />
 
           {isTransforming && (
-            <div className='transforming-loader'>
+            <div className='flex-center absolute left-[50%] top-[50%] size-full -translate-x-1/2 -translate-y-1/2 flex-col gap-2 rounded-[10px] border bg-dark-700'>
               <LoaderCircle width={50} height={50} className='animate-spin' />
               <p className='text-white/80'>Please wait...</p>
             </div>

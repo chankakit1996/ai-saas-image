@@ -54,6 +54,7 @@ const imageSchema = z
     height: z.number(),
     publicId: z.string(),
     secureURL: z.string(),
+    _id: z.string(),
   })
   .partial()
   .superRefine((_data, ctx) => {

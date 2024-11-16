@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import {
@@ -13,6 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Coins, X } from 'lucide-react'
 
 export default function InsufficientCreditsModal() {
   const router = useRouter()
@@ -27,22 +27,11 @@ export default function InsufficientCreditsModal() {
               className='border-0 p-0 hover:bg-transparent'
               onClick={() => router.push('/profile')}
             >
-              <Image
-                src='/assets/icons/close.svg'
-                alt='credit coins'
-                width={24}
-                height={24}
-                className='cursor-pointer'
-              />
+              <X width={24} height={24} className='cursor-pointer' />
             </AlertDialogCancel>
           </div>
 
-          <Image
-            src='/assets/images/stacked-coins.png'
-            alt='credit coins'
-            width={462}
-            height={122}
-          />
+          <Coins width={462} height={122} />
 
           <AlertDialogTitle className='p-24-bold text-dark-600'>
             Oops.... Looks like you&#39;ve run out of free credits!

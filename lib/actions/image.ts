@@ -53,7 +53,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
     const imageToUpdate = await Image.findById(image._id)
 
-    if (!imageToUpdate || imageToUpdate.author.toHexString() !== userId) {
+    if (!imageToUpdate || imageToUpdate.author._id.toString() !== userId) {
       throw new Error('Unauthorized or image not found')
     }
 
